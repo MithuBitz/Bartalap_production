@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "728403705278",
+    "firebase_url": "https://bartalappro.firebaseio.com",
+    "project_id": "bartalappro",
+    "storage_bucket": "bartalappro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728403705278:android:133dffef37fcee5b898def",
+        "android_client_info": {
+          "package_name": "com.example.bartalap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728403705278-7k9v0epqrdhppnludduqsfdgja3msee7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW1Tc8L5GHe8J7vUeuuYDrmsWxTLCgRvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728403705278-7k9v0epqrdhppnludduqsfdgja3msee7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
