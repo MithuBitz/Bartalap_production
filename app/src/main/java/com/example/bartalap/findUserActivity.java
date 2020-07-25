@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.telephony.TelephonyManager;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class findUserActivity extends AppCompatActivity {
     private RecyclerView.Adapter mUserListAdapter;
     private RecyclerView.LayoutManager mUserListLayoutManager;
 
-    ArrayList<UserObject> userList;
+    ArrayList<UserObject> userList, contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class findUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_find_user);
 
         userList = new ArrayList<>();
+        contactList = new ArrayList<>();
 
         initializeRecyclerView();
 
@@ -42,9 +44,20 @@ public class findUserActivity extends AppCompatActivity {
             String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
             UserObject mContacts = new UserObject(name,phone);
-            userList.add(mContacts);
+            contactList.add(mContacts);
             mUserListAdapter.notifyDataSetChanged();
         }
+    }
+
+    private String getCountryISO() {
+        String iso = null;
+
+        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(getApplicationContext().TELEPHONY_SERVICE);
+        if (telephonyManager.getNetworkCountryIso() != null)
+            if (!telephonyManager.getNetworkCountryIso().toString().equals(""))
+                iso = telephonyManager.getNetworkCountryIso().toString();
+
+        return iso;
     }
 
     private void initializeRecyclerView() {
