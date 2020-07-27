@@ -1,5 +1,6 @@
 package com.example.bartalap;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,13 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.widget.LinearLayout;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -45,8 +53,52 @@ public class findUserActivity extends AppCompatActivity {
 
             UserObject mContacts = new UserObject(name,phone);
             contactList.add(mContacts);
-            mUserListAdapter.notifyDataSetChanged();
+            //mUserListAdapter.notifyDataSetChanged(); // delete this line because we dont want to change the data here
+
+            //Function is used to fetch the database for available user
+            getUserDetails(mContacts);
         }
+    }
+
+    private void getUserDetails(UserObject mContacts) {
+        //Create a refference of the data on the database which want to fetch
+        DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference().child("user");
+        //Fetched data order by phone number
+        Query query = mUserDB.orderByChild("phone").equalTo(mContacts.getPhone());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    String phone = "",
+                            name = "";
+                    // Get the user information from the database in an efficiant way
+                    //and loop through to all the user of the database
+                    for(DataSnapshot childSnapshot : snapshot.getChildren()){
+
+                        //If the child data phone is exist than get the value from the database
+                        if (childSnapshot.child("phone").getValue() != null) // if we dont use not null than app is crash when the value is null
+                            phone = childSnapshot.child("phone").getValue().toString();
+
+                        //If the child data phone is exist than get the value from the database
+                        if (childSnapshot.child("name").getValue() != null) // if we dont use not null than app is crash when the value is null
+                            phone = childSnapshot.child("name").getValue().toString();
+
+                        //Create an UserObject from the data which is fetched from the database
+                        UserObject mUser = new UserObject(name,phone);
+                        //Create a userList from the data
+                        userList.add(mUser);
+                        mUserListAdapter.notifyDataSetChanged(); //This is nessecery
+                        return;
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private String getCountryISO() {
@@ -57,7 +109,7 @@ public class findUserActivity extends AppCompatActivity {
             if (!telephonyManager.getNetworkCountryIso().toString().equals(""))
                 iso = telephonyManager.getNetworkCountryIso().toString();
 
-        return iso;
+        return CountryToPhonePrefix.getPhone(iso);
     }
 
     private void initializeRecyclerView() {

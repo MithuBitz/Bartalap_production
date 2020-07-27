@@ -116,8 +116,10 @@ public class LoginActivity extends AppCompatActivity {
                                 if(!snapshot.exists()) {
                                     Map<String, Object> userMap = new HashMap<>();
                                     userMap.put("phone", user.getPhoneNumber());
-                                    userMap.put("name", user.getDisplayName());
+                                    userMap.put("name", user.getPhoneNumber());
+                                    mUserDB.updateChildren(userMap);
                                 }
+                                userIsLoggedIn();
                             }
 
                             @Override
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
 
-                    //userIsLoggedIn();
+
                 }
             }
         });
