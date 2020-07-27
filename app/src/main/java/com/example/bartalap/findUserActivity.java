@@ -81,10 +81,20 @@ public class findUserActivity extends AppCompatActivity {
 
                         //If the child data phone is exist than get the value from the database
                         if (childSnapshot.child("name").getValue() != null) // if we dont use not null than app is crash when the value is null
-                            phone = childSnapshot.child("name").getValue().toString();
+                            name = childSnapshot.child("name").getValue().toString();
 
                         //Create an UserObject from the data which is fetched from the database
                         UserObject mUser = new UserObject(name,phone);
+
+                        if (name.equals(phone))
+                            //This is used to loop through the contact list
+                            for (UserObject mContactIterator : contactList) {
+                                if (mContactIterator.getPhone().equals(mUser.getPhone())) {
+                                    //if the number exist in the contact than fetch the name which is already have by the user in the contact list
+                                    mUser.setName(mContactIterator.getName());
+                                }
+                            }
+
                         //Create a userList from the data
                         userList.add(mUser);
                         mUserListAdapter.notifyDataSetChanged(); //This is nessecery
