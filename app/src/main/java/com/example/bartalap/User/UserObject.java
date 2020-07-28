@@ -1,4 +1,4 @@
-package com.example.bartalap;
+package com.example.bartalap.User;
 
 public class UserObject {
     private String name, phone;

@@ -1,4 +1,4 @@
-package com.example.bartalap;
+package com.example.bartalap.Utils;
 
 import java.util.HashMap;
 import java.util.Map;

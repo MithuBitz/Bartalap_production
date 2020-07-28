@@ -9,8 +9,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
-import android.widget.LinearLayout;
 
+import com.example.bartalap.User.UserListAdapter;
+import com.example.bartalap.User.UserObject;
+import com.example.bartalap.Utils.CountryToPhonePrefix;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
