@@ -7,12 +7,31 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bartalap.Chat.ChatListAdapter;
+import com.example.bartalap.Chat.ChatObject;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainPageActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
+
+    private RecyclerView mChatList;
+    private RecyclerView.Adapter mChatListAdapter;
+    private RecyclerView.LayoutManager mChatListLayoutManager;
+
+    ArrayList<ChatObject> chatList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +68,44 @@ public class MainPageActivity extends AppCompatActivity {
 
         // Creat a method for permission to read the contacts
         getPermissions();
+        initializeRecyclerView();
+        getUserChatList();
 
+    }
+
+    private void getUserChatList() {
+        DatabaseReference mUserChatDB = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat");
+
+        mUserChatDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()){
+                        ChatObject mChat = new ChatObject(childSnapshot.getKey());
+                        chatList.add(mChat);
+                        mChatListAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    private void initializeRecyclerView() {
+        mChatList = findViewById(R.id.chatList);
+        mChatList.setNestedScrollingEnabled(false);
+        mChatList.setHasFixedSize(false);
+
+        mChatListLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
+        mChatList.setLayoutManager(mChatListLayoutManager);
+
+        mChatListAdapter = new ChatListAdapter(chatList);
+        mChatList.setAdapter(mChatListAdapter);
     }
 
     private void getPermissions() {

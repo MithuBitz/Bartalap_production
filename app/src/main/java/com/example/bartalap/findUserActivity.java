@@ -53,7 +53,7 @@ public class findUserActivity extends AppCompatActivity {
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-            UserObject mContacts = new UserObject(name,phone);
+            UserObject mContacts = new UserObject("",name,phone);
             contactList.add(mContacts);
             //mUserListAdapter.notifyDataSetChanged(); // delete this line because we dont want to change the data here
 
@@ -86,7 +86,7 @@ public class findUserActivity extends AppCompatActivity {
                             name = childSnapshot.child("name").getValue().toString();
 
                         //Create an UserObject from the data which is fetched from the database
-                        UserObject mUser = new UserObject(name,phone);
+                        UserObject mUser = new UserObject(childSnapshot.getKey(),name,phone);
 
                         if (name.equals(phone))
                             //This is used to loop through the contact list
