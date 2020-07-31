@@ -38,6 +38,8 @@ public class MainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
+        chatList = new ArrayList<>();
+
         mAuth = FirebaseAuth.getInstance();
 
         Button mLogout = findViewById(R.id.logout);
@@ -80,7 +82,9 @@ public class MainPageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
+                    //Loop through every unique chatId in the database
                     for (DataSnapshot childSnapshot : snapshot.getChildren()){
+                        //Create a ChatObject
                         ChatObject mChat = new ChatObject(childSnapshot.getKey());
                         chatList.add(mChat);
                         mChatListAdapter.notifyDataSetChanged();

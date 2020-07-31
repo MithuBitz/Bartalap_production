@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
+import android.widget.LinearLayout;
 
 import com.example.bartalap.User.UserListAdapter;
 import com.example.bartalap.User.UserObject;
@@ -53,7 +54,7 @@ public class findUserActivity extends AppCompatActivity {
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-            UserObject mContacts = new UserObject("",name,phone);
+            UserObject mContacts = new UserObject("", name, phone);
             contactList.add(mContacts);
             //mUserListAdapter.notifyDataSetChanged(); // delete this line because we dont want to change the data here
 

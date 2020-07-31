@@ -44,9 +44,13 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Create a chat instance on the database where all the msg are stored with a unique chatId
+                //Not use user place on database to store the chat
                 String key = FirebaseDatabase.getInstance().getReference().child("chat").push().getKey();
 
+                //Create the chatId for the user who want to use chat so that user want to retrive the chat from the database with help of unique chatID
                 FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(true);
+                //To add the chatId to the user with whom the user like to chat
                 FirebaseDatabase.getInstance().getReference().child("user").child(userList.get(position).getUid()).child("chat").child(key).setValue(true);
             }
         });
