@@ -38,7 +38,7 @@ public class MainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        chatList = new ArrayList<>();
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -86,6 +86,14 @@ public class MainPageActivity extends AppCompatActivity {
                     for (DataSnapshot childSnapshot : snapshot.getChildren()){
                         //Create a ChatObject
                         ChatObject mChat = new ChatObject(childSnapshot.getKey());
+
+                        boolean exists = false;
+                        for (ChatObject mChatIterator : chatList) {
+                            if (mChatIterator.getChatId().equals(mChat.getChatId()))
+                                exists = true;
+                        }
+                        if (exists)
+                            continue;
                         chatList.add(mChat);
                         mChatListAdapter.notifyDataSetChanged();
                     }
@@ -101,6 +109,7 @@ public class MainPageActivity extends AppCompatActivity {
 
 
     private void initializeRecyclerView() {
+        chatList = new ArrayList<>();
         mChatList = findViewById(R.id.chatList);
         mChatList.setNestedScrollingEnabled(false);
         mChatList.setHasFixedSize(false);
